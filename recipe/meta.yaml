@@ -22,7 +22,6 @@ requirements:
   run:
     - python
     - packaging
-    #  - setuptools
     - six >=1.9.0
     - webencodings
 
