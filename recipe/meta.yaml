@@ -23,7 +23,7 @@ requirements:
     - python
     - packaging
     #  - setuptools
-    - six
+    - six >=1.9.0
     - webencodings
 
 test:
