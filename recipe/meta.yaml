@@ -29,10 +29,12 @@ requirements:
 test:
   requires:
     - pip
+    - python <3.10
   commands:
     - pip check
   imports:
     - bleach
+    - bleach._vendor
 
 about:
   home: https://github.com/mozilla/bleach
