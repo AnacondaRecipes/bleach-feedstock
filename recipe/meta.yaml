@@ -34,7 +34,6 @@ test:
     - pip check
   imports:
     - bleach
-    - bleach._vendor
 
 about:
   home: https://github.com/mozilla/bleach
