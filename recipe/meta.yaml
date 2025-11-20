@@ -1,18 +1,22 @@
 {% set name = "bleach" %}
-{% set version = "6.2.0" %}
+{% set version = "6.3.0" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 123e894118b8a599fd80d3ec1a6d4cc7ce4e5882b1317a7e1ba69b56e95f991f
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 6f3b91b1c0a02bb9a78b5a454c92506aa0fdf197e1d5e114d2e00c6f64306d22
+  patches:
+    # html5lib is unvendored, deleted html5lib files from the _vendor folder, updated imports in html5lib_shim.py and test_clean.py to use html5lib from the basic conda environment.
+    - patches/0001-unvendor-html5lib.patch
+    - patches/0002-update-clean-test.patch
 
 build:
   number: 0
-  skip: True  # [py<39]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -22,23 +26,23 @@ requirements:
     - setuptools
   run:
     - python
-    # for html5lib which is vendored, see https://github.com/mozilla/bleach/tree/main/bleach/_vendor
+    - html5lib ==1.1
     - webencodings
   run_constrained:
-    - tinycss2 >=1.1.0,<1.5 # extra:css
+    # css
+    - tinycss2 >=1.1.0,<1.5
 
 test:
-  imports:
-    - bleach
   source_files:
     - tests
-  requires:
-    - pip
-    - pytest
+  imports:
+    - bleach
   commands:
     - pip check
     - pytest tests -v
-
+  requires:
+    - pip
+    - pytest
 
 about:
   home: https://github.com/mozilla/bleach
@@ -50,7 +54,7 @@ about:
     Bleach is an allowed-list-based HTML sanitizing library that escapes or
     strips markup and attributes.
   dev_url: https://github.com/mozilla/bleach
-  doc_url: https://bleach.readthedocs.io/
+  doc_url: https://bleach.readthedocs.io
 
 extra:
   recipe-maintainers:
