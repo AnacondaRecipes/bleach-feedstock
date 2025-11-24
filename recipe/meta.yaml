@@ -9,13 +9,18 @@ source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 6f3b91b1c0a02bb9a78b5a454c92506aa0fdf197e1d5e114d2e00c6f64306d22
   patches:
-    # html5lib is unvendored, deleted html5lib files from the _vendor folder, updated imports in html5lib_shim.py and test_clean.py to use html5lib from the basic conda environment.
-    - patches/0001-unvendor-html5lib.patch
+    # html5lib is unvendored, updated imports in html5lib_shim.py and test_clean.py to use html5lib from the basic conda environment.
+    - patches/0001-unvendor-html5lib-and-urlparse.patch
     - patches/0002-update-clean-test.patch
+    - patches/0003-fix-trailing-whitespaces.patch
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  script:
+    # deleted html5lib files from the _vendor folder
+    - rm -rf {{ SRC_DIR }}/{{ name }}/_vendor  # [unix]
+    - rmdir /s /q {{ SRC_DIR }}\{{ name }}\_vendor # [win]
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: true  # [py<310]
 
 requirements:
