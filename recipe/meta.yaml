@@ -14,7 +14,7 @@ source:
     - patches/0002-fix-clean-test.patch
 
 build:
-  number: 0
+  number: 1
   script:
     # delete html5lib files from the _vendor folder
     - mv {{ SRC_DIR }}/{{ name }}/_vendor/parse.py {{ SRC_DIR }}/{{ name }}/parse.py  # [unix]
@@ -42,7 +42,8 @@ requirements:
     - webencodings
   run_constrained:
     # css
-    - tinycss2 >=1.1.0,<1.5
+    # drop upper pin per https://github.com/mozilla/bleach/pull/779
+    - tinycss2 >=1.1.0
 
 test:
   source_files:
