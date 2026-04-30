@@ -43,7 +43,7 @@ requirements:
   run_constrained:
     # css
     # drop upper pin per https://github.com/mozilla/bleach/pull/779
-    - tinycss2 >=1.1.0,<1.5
+    - tinycss2 >=1.1.0
 
 test:
   source_files:
