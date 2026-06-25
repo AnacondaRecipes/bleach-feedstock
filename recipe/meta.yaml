@@ -1,5 +1,5 @@
 {% set name = "bleach" %}
-{% set version = "6.3.0" %}
+{% set version = "6.4.0" %}
 
 package:
   name: {{ name }}
@@ -7,26 +7,11 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 6f3b91b1c0a02bb9a78b5a454c92506aa0fdf197e1d5e114d2e00c6f64306d22
-  patches:
-    # html5lib is unvendored, updated imports in html5lib_shim.py and test_clean.py to use html5lib from the basic conda environment.
-    - patches/0001-unvendor-html5lib.patch
-    - patches/0002-fix-clean-test.patch
+  sha256: 4202482733d85cedd04e59fcb2f89f4e4c7c385a78d3c3c23c30446843a37452
 
 build:
-  number: 1
+  number: 0
   script:
-    # delete html5lib files from the _vendor folder
-    - mv {{ SRC_DIR }}/{{ name }}/_vendor/parse.py {{ SRC_DIR }}/{{ name }}/parse.py  # [unix]
-    - rm -rf {{ SRC_DIR }}/{{ name }}/_vendor  # [unix]
-    - mkdir -p {{ SRC_DIR }}/{{ name }}/_vendor  # [unix]
-    - mv {{ SRC_DIR }}/{{ name }}/parse.py {{ SRC_DIR }}/{{ name }}/_vendor/parse.py  # [unix]
-
-    - move /Y {{ SRC_DIR }}\{{ name }}\_vendor\parse.py {{ SRC_DIR }}\{{ name }}\parse.py  # [win]
-    - if exist {{ SRC_DIR }}\{{ name }}\_vendor rmdir /S /Q {{ SRC_DIR }}\{{ name }}\_vendor  # [win]
-    - mkdir {{ SRC_DIR }}\{{ name }}\_vendor  # [win]
-    - move /Y {{ SRC_DIR }}\{{ name }}\parse.py {{ SRC_DIR }}\{{ name }}\_vendor\parse.py  # [win]
-    
     - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: true  # [py<310]
 
@@ -38,7 +23,6 @@ requirements:
     - setuptools
   run:
     - python
-    - html5lib ==1.1
     - webencodings
   run_constrained:
     # css
